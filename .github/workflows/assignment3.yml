@@ -7,20 +7,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set date
-        run: echo "DATE=$(date -I)" >> $GITHUB_ENV
+        run: |
+          echo "FULL_DATE=$(date -Iminutes)" >> $GITHUB_ENV
+          echo "DATE=$(date -I)" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build_image
         run: docker build -t dishes_meals:${{ env.DATE }} .
-      - name: Upload image as artifact
+      - name: save image as tar file
+        run: docker save dishes_meals:${{ env.DATE }} -o dishes_meals.tar
+      - name: Upload image tar as artifact
         uses: actions/upload-artifact@v2
         with:
           name: dishes_meals_img
-          path: .
+          path: dishes_meals.tar
       - name: set up log file
         if: always()
         run: |
-          echo $(env.DATE) >> log.txt
+          echo ${{ env.FULL_DATE }} >> log.txt
           echo "Roni Milstein" >> log.txt
       - name: Update log for successful job
         if: success()
@@ -36,6 +40,60 @@ jobs:
           path: log.txt
   # 2nd job test performs tests using pytest
 
-  # remember to cd to pytest code!
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+    - name: load img
+      run: docker load --input dishes_meals_img/dishes_meals.tar
+    - name: check dishes_meals image is loaded
+      run: docker dishes_meals_img ls
+    - name: run image in container
+      run: docker run -p8000:8000 dishes_meals &
+    - name: check container is running
+      run: docker ps
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: set up python
+      uses: actions/setup-python@v4
+
+#    - name: install dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install pytest
+#        pip install requests
+#
+#    - name: test with pytest
+#      run: |
+#        cd tests
+#        pytest -v assn3_tests.py > assn3_test_results.txt
+        
+
+    - name: update log with successfully ran container
+      if: success()
+      run: echo "Container up and running" >> WF_log/log.txt
+
+    - name: update log with failed to run container
+      if: failure()
+      run: echo "Container failed to run" >> WF_log/log.txt
+
+
+#    - name: upload test results as artifact
+#      if: always()
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: test_results
+#        path: tests/assn3_test_results.txt
+
+    - name: upload updated log as artifact
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: WF_log
+        path: WF_log/log.txt
+
+
+
 
 
