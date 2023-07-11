@@ -41,6 +41,7 @@ jobs:
   # 2nd job test performs tests using pytest
 
   test:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Download artifacts
@@ -93,6 +94,9 @@ jobs:
       with:
         name: WF_log
         path: WF_log/log.txt
+
+
+# don't forget needs!!!!
 
 
 
