@@ -421,5 +421,5 @@ api.add_resource(MealName, '/meals/<string:mealName>')
 
 if __name__ == '__main__':
     # create collection dictionary and keys list
-    print("running HW1.py")
+    print("running dishes_meals.py")
 

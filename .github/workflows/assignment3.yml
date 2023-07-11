@@ -1,0 +1,52 @@
+name: assignment3
+on:
+  push
+jobs:
+  # 1st job build creates the image
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set date
+        run: echo "DATE=$(date -I)" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build_image
+        run: docker build -t dishes_meals:${{ env.DATE }} .
+      - name: Upload image as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dishes_meals_img
+          path: ${{ steps.Build_image.outputs.DOCKER_BUILD_PATH }}
+      - name: set up log file
+        if: always() |
+        run: |
+          echo env.DATE >> log.txt
+          echo "Roni Milstein" >> log.txt
+      - name: Update log for successful job
+        if: success() |
+        run: echo "image successfully built" >> log.txt
+      - name: Update log for failed job
+        if: failure() |
+        run: echo "image not able to be built" >> ./log.txt
+      - name: Upload log file as artifact
+        if: always() |
+        uses: actions/upload-artifact@v3
+        with:
+          name: WF_log
+          path: log.txt
+  # 2nd job test performs tests using pytest
+
+  # remember to cd to pytest code!
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+
+  # 3rd job query issues requests to the dishes and meals service
+  query:
+    needs: test
+    runs-on: ubuntu-latest
+
+# need to consider when to update log.txt
