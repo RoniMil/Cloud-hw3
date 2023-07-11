@@ -16,20 +16,20 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: dishes_meals_img
-          path: ${{ steps.Build_image.outputs.DOCKER_BUILD_PATH }}
+          path: .
       - name: set up log file
-        if: always() |
+        if: always()
         run: |
-          echo env.DATE >> log.txt
+          echo $(env.DATE) >> log.txt
           echo "Roni Milstein" >> log.txt
       - name: Update log for successful job
-        if: success() |
+        if: success()
         run: echo "image successfully built" >> log.txt
       - name: Update log for failed job
-        if: failure() |
-        run: echo "image not able to be built" >> ./log.txt
+        if: failure()
+        run: echo "image not able to be built" >> log.txt
       - name: Upload log file as artifact
-        if: always() |
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: WF_log
@@ -37,16 +37,5 @@ jobs:
   # 2nd job test performs tests using pytest
 
   # remember to cd to pytest code!
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
 
-  # 3rd job query issues requests to the dishes and meals service
-  query:
-    needs: test
-    runs-on: ubuntu-latest
 
-# need to consider when to update log.txt
