@@ -34,7 +34,7 @@ meal_col = {}
 
 def get_dish_ID_by_name(col, dishName):
     for id, dish in col.items():
-        if dish['name'] == dishName:
+        if dish.get('name') == dishName:
             return id
     return 0
 
@@ -67,7 +67,7 @@ def test2():
 def test3():
     response = connectionController.http_get("dishes")
     response_json = response.json()
-    assert len(response_json) == 3
+    assert (len(response_json) == 3)
     assert_status_code(response, status_code=200)
 
 
@@ -97,7 +97,7 @@ def test6():
 def test7():
     response = connectionController.http_get("meals")
     response_json = response.json()
-    assert len(response_json) == 1
+    assert (len(response_json) == 1)
     meal = response_json[0]
     assert (400 <= meal["calories"] <= 500)
     assert_status_code(response, status_code=200)
