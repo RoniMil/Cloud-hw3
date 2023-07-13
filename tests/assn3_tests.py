@@ -34,8 +34,8 @@ meal_col = {}
 
 def get_dish_ID_by_name(col, dishName):
     for dish in col.items():
-        if dish["name"] == dishName:
-            return dish["ID"]
+        if dish.get("name") == dishName:
+            return dish.get("ID")
     return 0
 
 def get_dishes_ids(col, dishes):
