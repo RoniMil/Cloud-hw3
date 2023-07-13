@@ -54,7 +54,8 @@ def test1():
     for dish in dishes:
         response = connectionController.http_post("dishes", {"name": dish})
         assert_valid_added_resource(response)
-        dish_col[response.json()] = dish
+        dish_id = response.json()
+        dish_col[dish_id] = connectionController.http_get(f"dishes/{dish_id}")
 
 
 def test2():
