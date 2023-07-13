@@ -36,6 +36,7 @@ jobs:
         with:
           name: WF_log
           path: log.txt
+
   # 2nd job test performs tests using pytest
 
   test:
@@ -44,6 +45,8 @@ jobs:
     steps:
     - name: Download artifacts
       uses: actions/download-artifact@v3
+      with:
+        path: artifacts/
     - name: load img
       run: docker load --input dishes_meals_img/dishes_meals.tar
     - name: check dishes_meals image is loaded
@@ -76,11 +79,11 @@ jobs:
 
     - name: update log with successfully ran container
       if: success()
-      run: echo "Container up and running" >> WF_log/log.txt
+      run: echo "Container up and running" >> artifacts/WF_log/log.txt
 
     - name: update log with failed to run container
       if: failure()
-      run: echo "Container failed to run" >> WF_log/log.txt
+      run: echo "Container failed to run" >> artifacts/WF_log/log.txt
 
 #    - name: upload image as artifact
 #      if: always()
@@ -101,7 +104,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: WF_log
-        path: log.txt
+        path: artifacts/WF_log/log.txt
 
 #  query:
 #    # needs build for sure. should it depend on test tho?
