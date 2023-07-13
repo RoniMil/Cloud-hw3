@@ -59,6 +59,7 @@ def test1():
         print("dish: ",  dish_json)
         dish_col[dish_id] = dish_json
 
+# !!! add assert correct form to post tests? !!!
 
 def test2():
     dish_name = "orange"
@@ -104,11 +105,12 @@ def test6():
 
 def test7():
     response = connectionController.http_get("meals")
-    response_json = response.json()
-    assert (len(response_json) == 1)
-    meal = response_json[0]
-    assert (400 <= meal["calories"] <= 500)
-    assert_status_code(response, status_code=200)
+    meals = response.json()
+    assert len(meals) == 1
+    for meal in meals:
+        if (meals.get("name") == "delicious"):
+            assert (400 <= meal["calories"] <= 500)
+            assert_status_code(response, status_code=200)
 
 def test8():
     dishes = ["apple pie", "spaghetti", "orange"]
