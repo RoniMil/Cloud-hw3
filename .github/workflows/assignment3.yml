@@ -52,7 +52,7 @@ jobs:
     # for testing
     - name: testing
       run: ls -R
-
+      #########################################################
     - name: load img
       run: docker load --input artifacts/dishes_meals_img/dishes_meals.tar
     - name: check dishes_meals image is loaded
@@ -84,20 +84,16 @@ jobs:
     # testing
     - name: testing2
       run: ls -R
-
-    - name: return to home dir
-      run: cd
+    #########################################################
+#    - name: return to home dir
+#      run: cd
     - name: update log with successfully ran container
       if: success()
-      run: |
-        cd ./artifacts/WF_log 
-        echo "Container up and running" >> log.txt
+      run: echo "Container up and running" >> artifacts/WF_log/log.txt
 
     - name: update log with failed to run container
       if: failure()
-      run: |
-        cd ./artifacts/WF_log
-        echo "Container failed to run" >> log.txt
+      run: echo "Container failed to run" >> artifacts/WF_loglog.txt
 
 #    - name: upload image as artifact
 #      if: always()
@@ -118,7 +114,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: WF_log
-        path: ./artifacts/WF_log/log.txt
+        path: artifacts/WF_log/log.txt
 
 #  query:
 #    # needs build for sure. should it depend on test tho?
