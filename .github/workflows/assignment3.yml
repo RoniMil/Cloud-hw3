@@ -48,7 +48,7 @@ jobs:
       with:
         path: artifacts/
     - name: load img
-      run: docker load --input dishes_meals_img/dishes_meals.tar
+      run: docker load --input artifacts/dishes_meals_img/dishes_meals.tar
     - name: check dishes_meals image is loaded
       run: docker image ls
     - name: run image in container
