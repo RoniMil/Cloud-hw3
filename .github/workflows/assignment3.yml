@@ -47,6 +47,10 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         path: artifacts/
+    # for testing
+    - name: testing
+      run: ls artifacts/
+
     - name: load img
       run: docker load --input artifacts/dishes_meals_img/dishes_meals.tar
     - name: check dishes_meals image is loaded
