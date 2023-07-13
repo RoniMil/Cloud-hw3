@@ -49,7 +49,7 @@ jobs:
         path: artifacts/
     # for testing
     - name: testing
-      run: ls artifacts/
+      run: ls -R
 
     - name: load img
       run: docker load --input artifacts/dishes_meals_img/dishes_meals.tar
@@ -84,11 +84,15 @@ jobs:
       run: cd
     - name: update log with successfully ran container
       if: success()
-      run: echo "Container up and running" >> artifacts/WF_log/log.txt
+      run: |
+        cd artifacts/WF_log 
+        echo "Container up and running" >> log.txt
 
     - name: update log with failed to run container
       if: failure()
-      run: echo "Container failed to run" >> artifacts/WF_log/log.txt
+      run: |
+        cd artifacts/WF_log
+        echo "Container failed to run" >> artifacts/WF_log/log.txt
 
 #    - name: upload image as artifact
 #      if: always()
