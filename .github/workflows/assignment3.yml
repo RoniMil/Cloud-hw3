@@ -77,11 +77,11 @@ jobs:
 
     - name: update log with successfully ran container
       if: success()
-      run: echo "Container up and running" >> WF_log/log.txt
+      run: echo "Container up and running" >> log.txt
 
     - name: update log with failed to run container
       if: failure()
-      run: echo "Container failed to run" >> WF_log/log.txt
+      run: echo "Container failed to run" >> log.txt
 
     - name: upload image as artifact
       if: always()
