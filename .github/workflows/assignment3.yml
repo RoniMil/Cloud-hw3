@@ -76,7 +76,8 @@ jobs:
       # 2) have the pytest return the response.txt, use cat to read it and search (using grep or something else) whether the word failed is in it
       # 2.5) check whether can just use if condition (102 lec 9)
         
-
+    - name: return to home dir
+      run: cd
     - name: update log with successfully ran container
       if: success()
       run: echo "Container up and running" >> artifacts/WF_log/log.txt
