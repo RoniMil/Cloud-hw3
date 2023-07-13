@@ -54,22 +54,27 @@ jobs:
       run: docker run -p8000:8000 dishes_meals &
     - name: check container is running
       run: docker ps
+      # if everything ran successfully this far, does it mean the container is up and running?
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: set up python
+      uses: actions/setup-python@v4
 
-#    - name: checkout
-#      uses: actions/checkout@v3
-#    - name: set up python
-#      uses: actions/setup-python@v4
+    - name: install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+        pip install requests
 
-#    - name: install dependencies
-#      run: |
-#        python -m pip install --upgrade pip
-#        pip install pytest
-#        pip install requests
-#
-#    - name: test with pytest
-#      run: |
-#        cd tests
-#        pytest -v assn3_tests.py > assn3_test_results.txt
+    - name: test with pytest
+      run: |
+        cd tests
+        pytest -v assn3_tests.py > assn3_test_results.txt
+
+      # ideas for determining whether testing was successful (so we know what to return in log file):
+      # 1) create a new python file/have a boolean function in the tests that checks whether there was a test that failed
+      # 2) have the pytest return the response.txt, use cat to read it and search (using grep or something else) whether the word failed is in it
+      # 2.5) check whether can just use if condition (102 lec 9)
         
 
     - name: update log with successfully ran container
@@ -80,13 +85,19 @@ jobs:
       if: failure()
       run: echo "Container failed to run" >> WF_log/log.txt
 
+    - name: upload image as artifact
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: dishes_meals_img
+        path: dishes_meals_img/dishes_meals.tar
 
-#    - name: upload test results as artifact
-#      if: always()
-#      uses: actions/upload-artifact@v3
-#      with:
-#        name: test_results
-#        path: tests/assn3_test_results.txt
+    - name: upload test results as artifact
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test_results
+        path: tests/assn3_test_results.txt
 
     - name: upload updated log as artifact
       if: always()
@@ -95,9 +106,54 @@ jobs:
         name: WF_log
         path: WF_log/log.txt
 
+#  query:
+#    # needs build for sure. should it depend on test tho?
+#    needs: test
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Download artifacts
+#        uses: actions/download-artifact@v3
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: check query.txt exists
+#        run: ls query.txt
+#
+#      # run the image container either before or after check query.txt exists step
+#
+#      - name: read query.txt file
+#        run: cat query.txt
+#
+#
+#      # use curl to run the post and get requests?
+#      # how to run the variable number of food items?
+#
+#
+#      - name: upload updated log as artifact
+#        if: always()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: WF_log
+#          path: WF_log/log.txt
+#
+#      - name: upload test results as artifact
+#        if: always()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: test_results
+#          path: test_results/assn3_test_results.txt
+#
+#      - name: upload response txt as artifact
+#        if: always()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: response_results
+#          with: response.txt
 
-# query:
-#  needs: test
+
+
+
+
 
 
 
