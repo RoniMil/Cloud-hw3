@@ -7,13 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set date
-        run: |
-          echo "FULL_DATE=$(date -Iminutes)" >> $GITHUB_ENV
-          echo "DATE=$(date -I)" >> $GITHUB_ENV
+        run: echo "DATE=$(date -Iminutes)" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build_image
-        run: docker build -t dishes_meals:${{ env.DATE }} .
+        run: docker build -t dishes_meals:latest .
       - name: save image as tar file
         run: docker save dishes_meals:${{ env.DATE }} -o dishes_meals.tar
       - name: Upload image tar as artifact
@@ -24,7 +22,7 @@ jobs:
       - name: set up log file
         if: always()
         run: |
-          echo ${{ env.FULL_DATE }} >> log.txt
+          echo ${{ env.DATE }} >> log.txt
           echo "Roni Milstein" >> log.txt
       - name: Update log for successful job
         if: success()
@@ -51,7 +49,7 @@ jobs:
     - name: check dishes_meals image is loaded
       run: docker image ls
     - name: run image in container
-      run: docker run -p8000:8000 dishes_meals:${{ env.DATE }} &
+      run: docker run -p8000:8000 dishes_meals &
     - name: check container is running
       run: docker ps
       # if everything ran successfully this far, does it mean the container is up and running?
