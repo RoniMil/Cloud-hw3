@@ -44,18 +44,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Download image
+    - name: Download artifacts
       uses: actions/download-artifact@v3
-      with:
-        name: dishes_meals_img
-        path: temp/
-    - name: Download log
-      uses: actions/download-artifact@v3
-      with:
-        name: WF_log
-        path: temp/
     - name: load img
-      run: docker load --input temp/dishes_meals.tar
+      run: docker load --input dishes_meals.tar
     - name: check dishes_meals image is loaded
       run: docker image ls
     - name: run image in container
@@ -87,18 +79,18 @@ jobs:
 
     - name: update log with successfully ran container
       if: success()
-      run: echo "Container up and running" >> temp/log.txt
+      run: echo "Container up and running" >> WF_log/log.txt
 
     - name: update log with failed to run container
       if: failure()
-      run: echo "Container failed to run" >> temp/log.txt
+      run: echo "Container failed to run" >> WF_log/log.txt
 
     - name: upload image as artifact
       if: always()
       uses: actions/upload-artifact@v3
       with:
         name: dishes_meals_img
-        path: temp/dishes_meals.tar
+        path: dishes_meals.tar
 
     - name: upload test results as artifact
       if: always()
@@ -112,7 +104,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: WF_log
-        path: temp/log.txt
+        path: log.txt
 
 #  query:
 #    # needs build for sure. should it depend on test tho?
