@@ -51,7 +51,7 @@ jobs:
     - name: check dishes_meals image is loaded
       run: docker image ls
     - name: run image in container
-      run: docker run -p8000:8000 dishes_meals &
+      run: docker run -p8000:8000 dishes_meals:${{ env.DATE }} &
     - name: check container is running
       run: docker ps
       # if everything ran successfully this far, does it mean the container is up and running?
