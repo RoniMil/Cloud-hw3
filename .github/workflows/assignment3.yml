@@ -127,46 +127,53 @@ jobs:
         name: WF_log
         path: artifacts/WF_log/log.txt
 
-#  query:
-#    # needs build for sure. should it depend on test tho?
-#    needs: test
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#      - name: Download artifacts
-#        uses: actions/download-artifact@v3
-#        with:
-#          path: artifacts/
-#
-#
-#      - name: check query.txt exists
-#        run: ls query.txt
-#
-#      # run the image container either before or after check query.txt exists step
-#
-#      - name: read query.txt file
-#        run: cat query.txt
-#
-#
-#      # use curl to run the post and get requests?
-#      # how to run the variable number of food items?
-#
-#
+  query:
+    # needs build for sure. should it depend on test tho?
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts/
+      - name: load img
+        run: docker load --input artifacts/dishes_meals_img/dishes_meals.tar
+      - name: check dishes_meals image is loaded
+        run: docker image ls
+      - name: run image in container
+        run: docker run -p8000:8000 dishes_meals &
+      - name: check container is running
+        run: docker ps
+      # for testing
+      - name: check query.txt exists
+        run: ls query.txt
+      - name: read query.txt file
+        run: cat query.txt
+      # run the image container either before or after check query.txt exists step
+
+
+
+
+      # use curl to run the post and get requests?
+      # how to run the variable number of food items?
+
+
 #      - name: upload updated log as artifact
 #        if: always()
 #        uses: actions/upload-artifact@v3
 #        with:
 #          name: WF_log
-#          path: WF_log/log.txt
+#          path: artifacts/WF_log/log.txt
 #
 #      - name: upload test results as artifact
 #        if: always()
 #        uses: actions/upload-artifact@v3
 #        with:
 #          name: test_results
-#          path: test_results/assn3_test_results.txt
-#
+#          path: artifacts/test_results/assn3_test_results.txt
+
 #      - name: upload response txt as artifact
 #        if: always()
 #        uses: actions/upload-artifact@v3
