@@ -33,9 +33,7 @@ meal_col = {}
 #     return response
 
 def get_dish_ID_by_name(col, dishName):
-    print("col: ", col)
     for dish_id, dish in col.items():
-        print("dish:", dish)
         if dish.get("name") == dishName:
             return dish_id
     return 0
@@ -57,7 +55,6 @@ def test1():
         assert_valid_added_resource(response)
         dish_id = response.json()
         dish_json = connectionController.http_get(f"dishes/{dish_id}").json()
-        print("dish: ",  dish_json)
         dish_col[dish_id] = dish_json
 
 # !!! add assert correct form to post tests? !!!
@@ -101,7 +98,6 @@ def test6():
     assert_valid_added_resource(response)
     meal_id = response.json()
     meal_json = connectionController.http_get(f"meals/{meal_id}").json()
-    print("meal: ",  meal_json)
     meal_col[response.json()] = meal_json
 
 def test7():

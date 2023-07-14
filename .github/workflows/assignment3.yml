@@ -84,19 +84,24 @@ jobs:
       run: |
         cd tests
         pytest -v assn3_tests.py > assn3_test_results.txt
+        if [ $? -eq 0]; then
+          echo "tests succeeded" >> artifacts/WF_log/log.txt
+        else
+          echo "tests failed" >> artifacts/WF_log/log.txt
+          
 
       # ideas for determining whether testing was successful (so we know what to return in log file):
       # 1) create a new python file/have a boolean function in the tests that checks whether there was a test that failed
       # 2) have the pytest return the response.txt, use cat to read it and search (using grep or something else) whether the word failed is in it
       # 2.5) check whether can just use if condition (102 lec 9)
 
-    - name: update log with failed test result
-      if: ${{ failure() }}
-      run: echo "tests failed" >> artifacts/WF_log/log.txt
-
-    - name: update log with successful test result
-      if: ${{ success() }}
-      run: echo "tests succeeded" >> artifacts/WF_log/log.txt
+#    - name: update log with failed test result
+#      if: failure()
+#      run: echo "tests failed" >> artifacts/WF_log/log.txt
+#
+#    - name: update log with successful test result
+#      if: success()
+#      run: echo "tests succeeded" >> artifacts/WF_log/log.txt
 
 
     # testing
