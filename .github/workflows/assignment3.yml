@@ -85,7 +85,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: dishes_meals_img
-        path: dishes_meals.tar
+        path: artifacts/dishes_meals.tar
     - name: upload test results as artifact
       if: always()
       uses: actions/upload-artifact@v3
