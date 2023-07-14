@@ -167,7 +167,6 @@ jobs:
             calories=$(echo "$dish_data" | jq -r '.cal')
             sodium=$(echo "$dish_data" | jq -r '.sodium')
             sugar=$(echo "$dish_data" | jq -r '.sugar')
-            
             echo "$dish contains $calories calories, $sodium mgs of sodium, and $sugar grams of sugar" >> response.txt
           done < query.txt
 
