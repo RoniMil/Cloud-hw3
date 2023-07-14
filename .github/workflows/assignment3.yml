@@ -63,6 +63,14 @@ jobs:
       run: docker ps
       # if everything ran successfully this far, does it mean the container is up and running?
 
+    - name: update log with failed to run container
+      if: failure()
+      run: echo "Container failed to run" >> artifacts/WF_loglog.txt
+
+    - name: update log with successfully ran container
+      if: success()
+      run: echo "Container up and running" >> artifacts/WF_log/log.txt
+
     - name: set up python
       uses: actions/setup-python@v4
     - name: install dependencies
@@ -81,19 +89,21 @@ jobs:
       # 2) have the pytest return the response.txt, use cat to read it and search (using grep or something else) whether the word failed is in it
       # 2.5) check whether can just use if condition (102 lec 9)
 
+    - name: update log with failed test result
+      if: ${{ failure() }}
+      run: echo "tests failed" >> artifacts/WF_log/log.txt
+
+    - name: update log with successful test result
+      if: ${{ success() }}
+      run: echo "tests succeeded" >> artifacts/WF_log/log.txt
+
+
     # testing
     - name: testing2
       run: ls -R
     #########################################################
 #    - name: return to home dir
 #      run: cd
-    - name: update log with successfully ran container
-      if: success()
-      run: echo "Container up and running" >> artifacts/WF_log/log.txt
-
-    - name: update log with failed to run container
-      if: failure()
-      run: echo "Container failed to run" >> artifacts/WF_loglog.txt
 
 #    - name: upload image as artifact
 #      if: always()
@@ -121,10 +131,13 @@ jobs:
 #    needs: test
 #    runs-on: ubuntu-latest
 #    steps:
-#      - name: Download artifacts
-#        uses: actions/download-artifact@v3
 #      - name: Checkout
 #        uses: actions/checkout@v3
+#      - name: Download artifacts
+#        uses: actions/download-artifact@v3
+#        with:
+#          path: artifacts/
+#
 #
 #      - name: check query.txt exists
 #        run: ls query.txt
