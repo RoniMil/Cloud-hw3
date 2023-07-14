@@ -61,7 +61,7 @@ jobs:
       run: docker ps --filter ancestor=dishes_meals
     - name: Fail if container is not running
       run: exit 1
-      if: ${{ steps.check_container.outputs.status != 'Up' }}
+      if: ${{ steps.check_container.outputs.status == '' }}
       #############################################################
     - name: update log with failed to run container
       if: failure()
