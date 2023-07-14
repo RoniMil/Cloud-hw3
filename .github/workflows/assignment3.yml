@@ -34,7 +34,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: WF_log
+          name: log
           path: log.txt
 
   # 2nd job test performs tests using pytest
@@ -59,10 +59,10 @@ jobs:
       run: docker ps
     - name: update log with failed to run container
       if: failure()
-      run: echo "Container failed to run" >> artifacts/WF_loglog.txt
+      run: echo "Container failed to run" >> artifacts/log/log.txt
     - name: update log with successfully ran container
       if: success()
-      run: echo "Container up and running" >> artifacts/WF_log/log.txt
+      run: echo "Container up and running" >> artifacts/log/log.txt
     - name: set up python
       uses: actions/setup-python@v4
     - name: install dependencies
@@ -76,10 +76,10 @@ jobs:
         pytest -v assn3_tests.py > assn3_test_results.txt
     - name: update log with failed test result
       if: failure()
-      run: echo "tests failed" >> artifacts/WF_log/log.txt
+      run: echo "tests failed" >> artifacts/log/log.txt
     - name: update log with successful test result
       if: success()
-      run: echo "tests succeeded" >> artifacts/WF_log/log.txt
+      run: echo "tests succeeded" >> artifacts/log/log.txt
     - name: upload image as artifact
       if: always()
       uses: actions/upload-artifact@v3
@@ -96,8 +96,8 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v3
       with:
-        name: WF_log
-        path: artifacts/WF_log/log.txt
+        name: log
+        path: artifacts/log/log.txt
 
   query:
     needs: test
@@ -149,7 +149,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: response_results
+          name: response
           path: response.txt
 
 
