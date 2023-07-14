@@ -59,8 +59,8 @@ jobs:
     - name: check container is running
       id: check_container
       run: |
-        container_status=$(docker ps --filter ancestor=dishes_meals)
-        echo "STATUS=$(container_status)" >> $GITHUB_ENV
+        container_status=$(docker ps)
+        echo "STATUS=$container_status" >> $GITHUB_ENV
 
     - name: Fail if container is not running
       run: exit 1
