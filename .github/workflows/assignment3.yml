@@ -77,14 +77,22 @@ jobs:
         pip install requests
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     # always create the assn3_test_results.txt file so that it can be uploaded as an artifact even if container failed to run
+    # it will be overriden with the test results in case the container runs correctly
     - name: create assn3_test_results file
       if: always()
-      run: touch tests/assn3_test_results.txt
+      run: echo "container didn't run - no tests were performed" > tests/assn3_test_results.txt
     - name: test with pytest
       run: |
         cd tests
         pytest -v assn3_tests.py > assn3_test_results.txt
-      # the following step will run iff the container is running but one or more tests failed
+    # for testing
+    - name: tests for assignment 1
+      run: |
+        cd ass_1_tests
+        pytest -v tests.py > assn1_test_results.txt
+        cat assn1_test_results.txt
+    ##################################################################
+    # the following step will run iff the container is running but one or more tests failed
     - name: update log with failed test result
       if: failure() && env.STATUS != ''
       run: echo "tests failed" >> artifacts/log/log.txt

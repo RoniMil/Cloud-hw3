@@ -49,7 +49,6 @@ def get_dishes_ids(col, dishes):
 
 def test1():
     dishes = ["orange", "spaghetti", "apple pie"]
-    #dishes = ["blah", "spaghetti", "apple pie"]
     for dish in dishes:
         response = connectionController.http_post("dishes", {"name": dish})
         assert_valid_added_resource(response)
