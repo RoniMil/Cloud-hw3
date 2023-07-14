@@ -88,9 +88,9 @@ jobs:
     # for testing
     - name: tests for assignment 1
       run: |
+        cd
         cd ass_1_tests
         pytest -v tests.py > assn1_test_results.txt
-        cat assn1_test_results.txt
     ##################################################################
     # the following step will run iff the container is running but one or more tests failed
     - name: update log with failed test result
@@ -99,6 +99,14 @@ jobs:
     - name: update log with successful test result
       if: success()
       run: echo "tests succeeded" >> artifacts/log/log.txt
+    ###################################################################
+    - name: upload assn1 tests as artifact
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: assn1_test_results
+        path: ass_1_tests/assn1_test_results.txt
+      ###################################################################
     - name: upload image as artifact
       if: always()
       uses: actions/upload-artifact@v3
