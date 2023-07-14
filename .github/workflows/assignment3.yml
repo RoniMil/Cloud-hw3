@@ -134,12 +134,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Download artifacts
+#      - name: Download artifacts
+#        uses: actions/download-artifact@v3
+#        with:
+#          path: artifacts/
+      - name: download image
         uses: actions/download-artifact@v3
         with:
-          path: artifacts/
+          name: dishes_meals_img
       - name: load img
-        run: docker load --input artifacts/dishes_meals_img/dishes_meals.tar
+        run: docker load --input dishes_meals_img/dishes_meals.tar
       - name: check dishes_meals image is loaded
         run: docker image ls
       - name: run image in container
