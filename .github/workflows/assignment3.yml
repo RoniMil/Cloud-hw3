@@ -49,10 +49,6 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         path: artifacts/
-    # for testing
-    - name: testing
-      run: ls -R
-      #########################################################
     - name: load img
       run: docker load --input artifacts/dishes_meals_img/dishes_meals.tar
     - name: check dishes_meals image is loaded
@@ -61,16 +57,12 @@ jobs:
       run: docker run -p8000:8000 dishes_meals &
     - name: check container is running
       run: docker ps
-      # if everything ran successfully this far, does it mean the container is up and running?
-
     - name: update log with failed to run container
       if: failure()
       run: echo "Container failed to run" >> artifacts/WF_loglog.txt
-
     - name: update log with successfully ran container
       if: success()
       run: echo "Container up and running" >> artifacts/WF_log/log.txt
-
     - name: set up python
       uses: actions/setup-python@v4
     - name: install dependencies
@@ -78,48 +70,28 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest
         pip install requests
-
     - name: test with pytest
       run: |
         cd tests
         pytest -v assn3_tests.py > assn3_test_results.txt
-
-
-      # ideas for determining whether testing was successful (so we know what to return in log file):
-      # 1) create a new python file/have a boolean function in the tests that checks whether there was a test that failed
-      # 2) have the pytest return the response.txt, use cat to read it and search (using grep or something else) whether the word failed is in it
-      # 2.5) check whether can just use if condition (102 lec 9)
-
     - name: update log with failed test result
       if: failure()
       run: echo "tests failed" >> artifacts/WF_log/log.txt
-
     - name: update log with successful test result
       if: success()
       run: echo "tests succeeded" >> artifacts/WF_log/log.txt
-
-
-    # testing
-    - name: testing2
-      run: ls -R
-    #########################################################
-#    - name: return to home dir
-#      run: cd
-
-#    - name: upload image as artifact
-#      if: always()
-#      uses: actions/upload-artifact@v3
-#      with:
-#        name: dishes_meals_img
-#        path: dishes_meals.tar
-
+    - name: upload image as artifact
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: dishes_meals_img
+        path: dishes_meals.tar
     - name: upload test results as artifact
       if: always()
       uses: actions/upload-artifact@v3
       with:
         name: test_results
         path: tests/assn3_test_results.txt
-
     - name: upload updated log as artifact
       if: always()
       uses: actions/upload-artifact@v3
@@ -128,7 +100,6 @@ jobs:
         path: artifacts/WF_log/log.txt
 
   query:
-    # needs build for sure. should it depend on test tho?
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -146,56 +117,34 @@ jobs:
         run: docker run -p8000:8000 dishes_meals &
       - name: check container is running
         run: docker ps
-      # for testing
       - name: check query.txt exists
         run: ls query.txt
       - name: read query.txt file
         run: cat query.txt
-      # run the image container either before or after check query.txt exists step
-
       - name: Process query.txt and generate response.txt
         run: |
           while IFS= read -r dish || [ -n "$dish" ]; do
             dish_id=$(curl --location --request POST "http://127.0.0.1:8000/dishes" \
                       --header 'Content-Type: application/json' \
                       --data-raw "{\"name\":\"$dish\"}")
-            dishes=$(curl --location --request GET "http://127.0.0.1:8000/dishes")
-            echo "dish id: $dish_id" >> why.txt
-            echo "dishes: $dishes" >> why.txt
             dish_data=$(curl --location --request GET "http://127.0.0.1:8000/dishes/$dish_id")
-            echo "dish data: $dish_data" >> why.txt
             calories=$(echo "$dish_data" | jq -r '.cal')
             sodium=$(echo "$dish_data" | jq -r '.sodium')
             sugar=$(echo "$dish_data" | jq -r '.sugar')
             echo "$dish contains $calories calories, $sodium mgs of sodium, and $sugar grams of sugar" >> response.txt
           done < query.txt
-
-
-      # !!!!mgs of sodium?!!!
-      - name: upload response txt as artifact
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: dish_data
-          path: why.txt
-      # use curl to run the post and get requests?
-      # how to run the variable number of food items?
-
-
       - name: upload updated log as artifact
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: WF_log
           path: artifacts/WF_log/log.txt
-
       - name: upload test results as artifact
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: test_results
           path: artifacts/test_results/assn3_test_results.txt
-
       - name: upload response txt as artifact
         if: always()
         uses: actions/upload-artifact@v3
