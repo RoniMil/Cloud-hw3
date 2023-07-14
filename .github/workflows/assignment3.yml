@@ -54,9 +54,15 @@ jobs:
     - name: check dishes_meals image is loaded
       run: docker image ls
     - name: run image in container
-      run: docker run -p8000:8000 leldishes_meals &
+      run: docker run -p8000:8000 dishes_meals &
     - name: check container is running
-      run: docker ps
+      id: check_container
+      #############################################################
+      run: docker ps --filter ancestor=dishes_meals
+    - name: Fail if container is not running
+      run: exit 1
+      if: ${{ steps.check_container.outputs.status != 'Up' }}
+      #############################################################
     - name: update log with failed to run container
       if: failure()
       run: echo "Container failed to run" >> artifacts/log/log.txt
