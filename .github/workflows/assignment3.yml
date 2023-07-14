@@ -57,11 +57,7 @@ jobs:
       run: docker run -p8000:8000 dishes_meals &
     ############################################################
     - name: check container is running
-      id: check_container
-      run: |
-        container_status=$(docker ps --filter ancestor=dishes_meals)
-        echo "STATUS=$container_status" >> $GITHUB_ENV
-
+      run: echo "STATUS=$(docker ps --filter ancestor=dishes_meals)" >> $GITHUB_ENV
     - name: Fail if container is not running
       run: exit 1
       if: (${{ env.STATUS }} == '')
