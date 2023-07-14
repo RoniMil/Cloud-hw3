@@ -88,7 +88,6 @@ jobs:
     # for testing
     - name: tests for assignment 1
       run: |
-        cd
         cd ass_1_tests
         pytest -v tests.py > assn1_test_results.txt
     ##################################################################
