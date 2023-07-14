@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build_image
-        run: docker build -t dishes_meals:latest .
+        run: docker build -t leldishes_meals:latest .
       - name: save image as tar file
         run: docker save dishes_meals:latest -o dishes_meals.tar
       - name: Upload image tar as artifact
