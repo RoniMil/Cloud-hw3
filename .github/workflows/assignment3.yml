@@ -80,7 +80,7 @@ jobs:
         pip install requests
 
     - name: test with pytest
-      continue-on-error: true
+      #continue-on-error: true
       run: |
         cd tests
         pytest -v assn3_tests.py > assn3_test_results.txt
