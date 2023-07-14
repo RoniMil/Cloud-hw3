@@ -156,10 +156,10 @@ jobs:
       - name: Process query.txt and generate response.txt
         run: |
           while IFS= read -r dish; do
-            dish_id=$(curl --location request POST 'http://localhost:8000/dishes' \
+            dish_id=$(curl --location request POST 'http://0.0.0.0:8000/dishes' \
                       --header 'Content-Type: application/json' \
                       --data-raw "{\"name\":\"$dish\"}")
-            dish=$(curl --location request GET 'http://localhost:8000/dishes/$dish_id')
+            dish=$(curl --location request GET 'http://0.0.0.0:8000/dishes/$dish_id')
             calories=$(echo "$response" | jq -r '.cal')
             sodium=$(echo "$response" | jq -r '.sodium')
             sugar=$(echo "$response" | jq -r '.sugar')
@@ -193,7 +193,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: response_results
-          with: response.txt
+          path: response.txt
 
 
 
