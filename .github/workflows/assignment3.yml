@@ -155,7 +155,7 @@ jobs:
 
       - name: Process query.txt and generate response.txt
         run: |
-          while IFS= read -r dish || || [ -n "$dish" ]; do
+          while IFS= read -r dish || [ -n "$dish" ]; do
             dish_id=$(curl --location --request POST "http://127.0.0.1:8000/dishes" \
                       --header 'Content-Type: application/json' \
                       --data-raw "{\"name\":\"$dish\"}")
