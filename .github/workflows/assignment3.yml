@@ -160,8 +160,8 @@ jobs:
                       --header 'Content-Type: application/json' \
                       --data-raw "{\"name\":\"$dish\"}")
             dish_data=$(curl --location --request GET 'http://127.0.0.1:8000/dishes/$dish_id')
-            echo "dish data: $dish_data" >> response.txt
-            calories=$(echo "$dish_data" | jq -r '.calories')
+            echo "dish data: $dish_data" >> why.txt
+            calories=$(echo "$dish_data" | jq -r '.cal')
             sodium=$(echo "$dish_data" | jq -r '.sodium')
             sugar=$(echo "$dish_data" | jq -r '.sugar')
             
@@ -170,7 +170,12 @@ jobs:
 
 
       # !!!!mgs of sodium?!!!
-
+      - name: upload response txt as artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: dish_data
+          path: why.txt
       # use curl to run the post and get requests?
       # how to run the variable number of food items?
 
