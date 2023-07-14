@@ -134,16 +134,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-#      - name: Download artifacts
-#        uses: actions/download-artifact@v3
-#        with:
-#          path: artifacts/
-      - name: download image
+      - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          name: dishes_meals_img
+          path: artifacts/
       - name: load img
-        run: docker load --input dishes_meals_img/dishes_meals.tar
+        run: docker load --input artifacts/dishes_meals_img/dishes_meals.tar
       - name: check dishes_meals image is loaded
         run: docker image ls
       - name: run image in container
@@ -157,33 +153,47 @@ jobs:
         run: cat query.txt
       # run the image container either before or after check query.txt exists step
 
+      - name: Process query.txt and generate response.txt
+        run: |
+          while IFS= read -r dish; do
+            dish_id=$(curl --location request POST 'http://localhost:8000/dishes' \
+                      --header 'Content-Type: application/json' \
+                      --data-raw "{\"name\":\"$dish\"}")
+            dish=$(curl --location request GET 'http://localhost:8000/dishes/$dish_id')
+            calories=$(echo "$response" | jq -r '.cal')
+            sodium=$(echo "$response" | jq -r '.sodium')
+            sugar=$(echo "$response" | jq -r '.sugar')
+            
+            echo "$dish contains $calories calories, $sodium mgs of sodium, and $sugar grams of sugar" >> response.txt
+          done < query.txt
 
 
+      # !!!!mgs of sodium?!!!
 
       # use curl to run the post and get requests?
       # how to run the variable number of food items?
 
 
-#      - name: upload updated log as artifact
-#        if: always()
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: WF_log
-#          path: artifacts/WF_log/log.txt
-#
-#      - name: upload test results as artifact
-#        if: always()
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: test_results
-#          path: artifacts/test_results/assn3_test_results.txt
+      - name: upload updated log as artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: WF_log
+          path: artifacts/WF_log/log.txt
 
-#      - name: upload response txt as artifact
-#        if: always()
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: response_results
-#          with: response.txt
+      - name: upload test results as artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test_results
+          path: artifacts/test_results/assn3_test_results.txt
+
+      - name: upload response txt as artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: response_results
+          with: response.txt
 
 
 
