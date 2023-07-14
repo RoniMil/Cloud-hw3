@@ -159,6 +159,7 @@ jobs:
             dish_id=$(curl --location --request POST 'http://127.0.0.1:8000/dishes' \
                       --header 'Content-Type: application/json' \
                       --data-raw "{\"name\":\"$dish\"}")
+            echo "dish id: $dish_id" >> why.txt
             dish_data=$(curl --location --request GET 'http://127.0.0.1:8000/dishes/$dish_id')
             echo "dish data: $dish_data" >> why.txt
             calories=$(echo "$dish_data" | jq -r '.cal')
