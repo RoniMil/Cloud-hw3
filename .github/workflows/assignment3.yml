@@ -81,16 +81,16 @@ jobs:
     - name: create assn3_test_results file
       if: always()
       run: echo "container didn't run - no tests were performed" > tests/assn3_test_results.txt
-    - name: test with pytest
-      run: |
-        cd tests
-        pytest -v assn3_tests.py > assn3_test_results.txt
-    # for testing
+      # for testing
     - name: tests for assignment 1
       run: |
         cd ass_1_tests
         pytest -v tests.py > assn1_test_results.txt
-    ##################################################################
+      ##################################################################
+    - name: test with pytest
+      run: |
+        cd tests
+        pytest -v assn3_tests.py > assn3_test_results.txt
     # the following step will run iff the container is running but one or more tests failed
     - name: update log with failed test result
       if: failure() && env.STATUS != ''
