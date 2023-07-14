@@ -55,7 +55,7 @@ jobs:
       run: docker image ls
     - name: run image in container
       run: docker run -d -p8000:8000 --name leldishes_meals_container dishes_meals &
-      ##############################################################
+      ############################################################
     - name: check container is running
       id: check_container
       run: |
@@ -68,7 +68,7 @@ jobs:
     - name: Fail if container is not running
       run: exit 1
       if: ${{ env.STATUS == '' }}
-      #############################################################
+      ############################################################
     - name: update log with failed to run container
       if: failure()
       run: echo "Container failed to run" >> artifacts/log/log.txt
