@@ -82,7 +82,7 @@ jobs:
         pytest -v assn3_tests.py > assn3_test_results.txt
       # the following step will run iff the container is running but one or more tests failed
     - name: update log with failed test result
-      if: failure() && {{ env.STATUS != '' }}
+      if: failure() && env.STATUS != ''
       run: echo "tests failed" >> artifacts/log/log.txt
     - name: update log with successful test result
       if: success()
