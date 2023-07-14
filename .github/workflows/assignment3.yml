@@ -10,10 +10,10 @@ jobs:
         run: echo "DATE=$(date -Iminutes)" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Build_image
+      - name: Build image
         run: docker build -t dishes_meals:latest .
       - name: save image as tar file
-        run: docker save dishes_meals:latest -o dishes_meals.tar
+        run: docker save leldishes_meals:latest -o dishes_meals.tar
       - name: Upload image tar as artifact
         uses: actions/upload-artifact@v3
         with:
