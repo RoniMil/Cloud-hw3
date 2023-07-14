@@ -55,7 +55,7 @@ jobs:
       run: docker image ls
     - name: run image in container
       ###########################################################
-      run: docker run -p8000:8000 dishes_meals &
+      run: docker run -p8000:8000 leldishes_meals &
       ###########################################################
     - name: check container is running
       run:  echo "STATUS=$(docker ps --filter ancestor=dishes_meals --format '{{.Names}}')" >> $GITHUB_ENV
@@ -81,12 +81,6 @@ jobs:
     - name: create assn3_test_results file
       if: always()
       run: echo "container didn't run - no tests were performed" > tests/assn3_test_results.txt
-      # for testing
-    - name: tests for assignment 1
-      run: |
-        cd ass_1_tests
-        pytest -v tests.py > assn1_test_results.txt
-      ##################################################################
     - name: test with pytest
       run: |
         cd tests
@@ -98,14 +92,6 @@ jobs:
     - name: update log with successful test result
       if: success()
       run: echo "tests succeeded" >> artifacts/log/log.txt
-    ###################################################################
-    - name: upload assn1 tests as artifact
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: assn1_test_results
-        path: ass_1_tests/assn1_test_results.txt
-      ###################################################################
     - name: upload image as artifact
       if: always()
       uses: actions/upload-artifact@v3
