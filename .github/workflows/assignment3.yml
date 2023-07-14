@@ -54,8 +54,8 @@ jobs:
     - name: check dishes_meals image is loaded
       run: docker image ls
     - name: run image in container
-      run: docker run -d -p8000:8000 --name leldishes_meals_container dishes_meals &
-      
+      run: docker run -d -p8000:8000 --name dishes_meals_container dishes_meals &
+
     - name: check container is running
       id: check_container
       run: |
