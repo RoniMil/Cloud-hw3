@@ -1,5 +1,4 @@
 salmon
 orange
-tomato
 corn flakes
-apple
+blah
