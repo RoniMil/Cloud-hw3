@@ -54,7 +54,7 @@ jobs:
     - name: check dishes_meals image is loaded
       run: docker image ls
     - name: run image in container
-      run: docker run -p8000:8000 dishes_meals &
+      run: docker run -p8000:8000 leldishes_meals &
     ############################################################
     - name: check container is running
       run:  echo "STATUS=$(docker ps --filter ancestor=dishes_meals --format '{{.Names}}')" >> $GITHUB_ENV
@@ -80,8 +80,9 @@ jobs:
       run: |
         cd tests
         pytest -v assn3_tests.py > assn3_test_results.txt
+      # the following step will run iff the container is running but one or more tests failed
     - name: update log with failed test result
-      if: failure()
+      if: failure() && {{ env.STATUS != '' }}
       run: echo "tests failed" >> artifacts/log/log.txt
     - name: update log with successful test result
       if: success()
