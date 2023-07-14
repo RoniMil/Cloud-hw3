@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build_image
-        run: docker build -t leldishes_meals:latest .
+        run: docker build -t dishes_meals:latest .
       - name: save image as tar file
         run: docker save dishes_meals:latest -o dishes_meals.tar
       - name: Upload image tar as artifact
@@ -54,7 +54,7 @@ jobs:
     - name: check dishes_meals image is loaded
       run: docker image ls
     - name: run image in container
-      run: docker run -p8000:8000 dishes_meals &
+      run: docker run -p8000:8000 leldishes_meals &
     - name: check container is running
       run: docker ps
     - name: update log with failed to run container
