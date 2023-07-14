@@ -54,7 +54,7 @@ jobs:
     - name: check dishes_meals image is loaded
       run: docker image ls
     - name: run image in container
-      run: docker run -p8000:8000 leldishes_meals &
+      run: docker run -p8000:8000 dishes_meals &
     ############################################################
     - name: check container is running
       run:  echo "STATUS=$(docker ps --filter ancestor=dishes_meals --format '{{.Names}}')" >> $GITHUB_ENV
