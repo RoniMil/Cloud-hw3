@@ -161,7 +161,7 @@ jobs:
                       --data-raw "{\"name\":\"$dish\"}")
             dishes=$(curl --location --request GET "http://127.0.0.1:8000/dishes")
             echo "dish id: $dish_id" >> why.txt
-            echo "dishes": $dishes" >> why.txt
+            echo "dishes: $dishes" >> why.txt
             dish_data=$(curl --location --request GET "http://127.0.0.1:8000/dishes/$dish_id")
             echo "dish data: $dish_data" >> why.txt
             calories=$(echo "$dish_data" | jq -r '.cal')
