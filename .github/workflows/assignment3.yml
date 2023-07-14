@@ -61,11 +61,13 @@ jobs:
       run: |
         container_status=$(docker ps -q --filter ancestor=dishes_meals)
         container_name=$(docker inspect -f '{{.Name}}' $container_status)
-        echo "::set-output name=status::$container_status"
-        echo "::set-output name=name::$container_name"
+        echo "STATUS=$(container_status) >> $GITHUB_ENV
+        echo "NAME=$(container_name) >> $GITHUB_ENV
+#        echo "::set-output name=status::$container_status"
+#        echo "::set-output name=name::$container_name"
     - name: Fail if container is not running
       run: exit 1
-      if: ${{ steps.check_container.outputs.status == '' }}
+      if: ${{ env.STATUS == '' }}
       #############################################################
     - name: update log with failed to run container
       if: failure()
