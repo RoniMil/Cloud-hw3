@@ -59,10 +59,9 @@ jobs:
     - name: check container is running
       run: |
         echo "STATUS=$(docker ps --filter ancestor=dishes_meals)" >> $GITHUB_ENV
-        echo ${{ env.STATUS }}
     - name: Fail if container is not running
       run: exit 1
-      if: (${{ env.STATUS }} == '')
+      if: env.STATUS == ''
     ##############################################################
     - name: update log with failed to run container
       if: failure()
