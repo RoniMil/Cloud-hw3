@@ -58,8 +58,9 @@ def test1():
         curr_dishes = connectionController.http_get("dishes").json()
         # asserts the given id of the dish we add is unique
         print("dish_json is: ", dish_json)
+        assert_status_code(response, status_code=404)
         assert 1 not in get_dishes_ids(dish_col, curr_dishes)
-        
+
         # assert dish_id not in get_dishes_ids(dish_col, curr_dishes)
         dish_col[dish_id] = dish_json
 
