@@ -117,9 +117,9 @@ def test7():
     meals = response.json()
     assert len(meals) == 1
     for meal in meals:
-        if (meals.get("name") == "delicious"):
+        if meal.get("name") == "delicious":
             assert (400 <= meal["calories"] <= 500)
-            assert_status_code(response, status_code=200)
+    assert_status_code(response, status_code=200)
 
 def test8():
     dishes = ["apple pie", "spaghetti", "orange"]
