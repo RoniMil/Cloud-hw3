@@ -14,7 +14,7 @@ jobs:
         run: docker build -t dishes_meals:latest .
       - name: save image as tar file
         ###########################################################
-        run: docker save leldishes_meals:latest -o dishes_meals.tar
+        run: docker save dishes_meals:latest -o dishes_meals.tar
         ###########################################################
       - name: Upload image tar as artifact
         uses: actions/upload-artifact@v3
@@ -57,7 +57,7 @@ jobs:
       run: docker image ls
     - name: run image in container
       ###########################################################
-      run: docker run -p8000:8000 dishes_meals &
+      run: docker run -p8000:8000 leldishes_meals &
       ###########################################################
     - name: check container is running
       run:  echo "STATUS=$(docker ps --filter ancestor=dishes_meals --format '{{.Names}}')" >> $GITHUB_ENV
