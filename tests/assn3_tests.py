@@ -81,15 +81,13 @@ def test3():
     assert_status_code(response, status_code=200)
 
 
-
 def test4():
-    #########################################################################
     response = connectionController.http_post("dishes", {"name": "blah"})
-    #########################################################################
     assert_non_existing_dish(response, [404, 400, 422])
-    #assert_non_existing_dish("blah", [404, 400, 422])
+
 def test5():
-    assert_dish_exists("orange", [400, 404, 422])
+    response = connectionController.http_post("dishes", {"name": "orange"})
+    assert_dish_exists(response, [400, 404, 422])
 
 # tests for meals service
 def test6():

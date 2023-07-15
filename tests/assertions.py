@@ -34,16 +34,8 @@ def assert_non_existing_dish(response: requests.Response, acceptable_codes) -> N
     assert response.status_code in acceptable_codes, f"Unexpected status code: {response.status_code}"
     assert_ret_value(response, returned_value=-3)
 
-# def assert_non_existing_dish(dish_identifier: any, acceptable_codes) -> None:
-#     response = connectionController.http_post("dishes", {"name": dish_identifier})
-#     assert response.status_code in acceptable_codes, f"Unexpected status code: {response.status_code}"
-#     assert_ret_value(response, returned_value=-3)
-
-
-
 # asserts that a given dish is already in the dish collection
-def assert_dish_exists(dish_identifier: any, acceptable_codes) -> None:
-    response = connectionController.http_post("dishes", {"name": dish_identifier})
+def assert_dish_exists(response: requests.Response, acceptable_codes) -> None:
     assert response.status_code in acceptable_codes, f"Unexpected status code: {response.status_code}"
     assert_ret_value(response, returned_value=-2)
 
