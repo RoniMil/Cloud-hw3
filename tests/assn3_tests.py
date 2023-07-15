@@ -77,10 +77,11 @@ def test2():
 def test3():
     response = connectionController.http_get("dishes")
     response_json = response.json()
+    print("dish col is:", response_json)
     # asserts that the dish collection has 3 dishes in it
     assert len(response_json) == 3
     # asserts the return code in 200
-    assert_status_code(response, status_code=200)
+    assert_status_code(response, status_code=200)lel
 
 
 def test4():
