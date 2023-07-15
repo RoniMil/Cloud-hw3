@@ -25,30 +25,14 @@ def assert_valid_added_resource(response: requests.Response):
     sys.stdout.flush()
     assert response.json() > VALID_RETURNED_RESOURCE_ID
 
-# def assert_unique_id(dish_identifier: any, dishes_ids) -> None:
-#     assert dish_identifier not in dishes_ids
-
 # asserts that a given dish doesn't exist because ninja api can't find it
 
 def assert_non_existing_dish(response: requests.Response, acceptable_codes) -> None:
     assert response.status_code in acceptable_codes, f"Unexpected status code: {response.status_code}"
     assert_ret_value(response, returned_value=-3)
 
-# asserts that a given dish is already in the dish collection
+# asserts that a given dish/meal is already in their respective collection
 def assert_item_exists(response: requests.Response, acceptable_codes) -> None:
     assert response.status_code in acceptable_codes, f"Unexpected status code: {response.status_code}"
     assert_ret_value(response, returned_value=-2)
 
-# asserts that a given meal is already in the meal collection
-
-
-# def assert_meal_exists(meal_identifier: any, dishes, acceptable_codes) -> None:
-#     meal = {
-#         "name": meal_identifier,
-#         "appetizer": dishes[0],
-#         "main": dishes[1],
-#         "dessert": dishes[2]
-#     }
-#     response = connectionController.http_post("meals", meal)
-#     assert response.status_code in acceptable_codes, f"Unexpected status code: {response.status_code}"
-#     assert_ret_value(response, returned_value=-2)
