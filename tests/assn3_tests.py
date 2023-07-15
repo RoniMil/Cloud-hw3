@@ -111,7 +111,7 @@ def test6():
     meal_id = response.json()
     meal_json = connectionController.http_get(f"meals/{meal_id}").json()
     print("meal_json is: ", meal_json)
-    meal_col[response.json()] = meal_json
+    meal_col[response.json()] = meal_jsonlel
 
 def test7():
     response = connectionController.http_get("meals")
@@ -120,8 +120,7 @@ def test7():
     assert len(meals) == 1
     meal = meals[0]
     assert (400 <= meal.get("calories") <= 500)
-
-    # for meal_id, meal_json in meals:
+    # for meal in meals:
     #     print(meal_json.get("name"))
     #     if meal_json.get("name") == "delicious":
     #         assert (400 <= meal_json["calories"] <= 500)
