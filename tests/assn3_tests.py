@@ -122,7 +122,7 @@ def test7():
     for meal in meals.values():
         if meal.get("name") == "delicious":
             # asserts the meal calories value is in required range
-            assert (400 <= meal["calories"] <= 500)
+            assert (400 <= meal["cal"] <= 500)
 
 
 def test8():
