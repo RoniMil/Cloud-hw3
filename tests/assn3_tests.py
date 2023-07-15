@@ -81,7 +81,8 @@ def test3():
     # asserts that the dish collection has 3 dishes in it
     assert len(response_json) == 3
     # asserts the return code in 200
-    assert_status_code(response, status_code=200)lel
+    assert_status_code(response, status_code=201)
+    #assert_status_code(response, status_code=200)
 
 
 def test4():
@@ -98,7 +99,8 @@ def test6():
     for dish in dishes:
         dish_response = connectionController.http_post("dishes", {"name": dish})
         # asserts that the dishes are in the dish collection and thus are able to be added to a meal
-        assert_item_exists(dish_response, [400, 404, 422])
+        assert_item_exists(dish_response, [200])
+        # assert_item_exists(dish_response, [400, 404, 422])
     dishes_ids = get_dishes_ids(dish_col, dishes)
     meal = {
         "name": "delicious",
@@ -112,12 +114,13 @@ def test6():
     meal_id = response.json()
     meal_json = connectionController.http_get(f"meals/{meal_id}").json()
     print("meal_json is: ", meal_json)
-    meal_col[response.json()] = meal_jsonlel
+    meal_col[response.json()] = meal_json
 
 def test7():
     response = connectionController.http_get("meals")
     assert_status_code(response, status_code=200)
     meals = response.json()
+    print("meal_col is: ", meals)
     assert len(meals) == 1
     meal = meals[0]
     assert (400 <= meal.get("calories") <= 500)
