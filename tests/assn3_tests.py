@@ -89,7 +89,7 @@ def test4():
 
 def test5():
     response = connectionController.http_post("dishes", {"name": "orange"})
-    assert_dish_exists(response, [400, 404, 422])
+    assert_item_exists(response, [400, 404, 422])
 
 # tests for meals service
 def test6():
@@ -97,7 +97,7 @@ def test6():
     for dish in dishes:
         dish_response = connectionController.http_post("dishes", {"name": dish})
         # asserts that the dishes are in the dish collection and thus are able to be added to a meal
-        assert_dish_exists(dish_response, [400, 404, 422])
+        assert_item_exists(dish_response, [400, 404, 422])
     dishes_ids = get_dishes_ids(dish_col, dishes)
     meal = {
         "name": "delicious",
@@ -115,6 +115,7 @@ def test6():
 def test7():
     response = connectionController.http_get("meals")
     meals = response.json()
+    print("meals: ", meals)
     assert len(meals) == 1
     for meal in meals:
         if meal.get("name") == "delicious":
@@ -124,7 +125,20 @@ def test7():
 def test8():
     dishes = ["apple pie", "spaghetti", "orange"]
     dishes_ids = get_dishes_ids(dish_col, dishes)
-    assert_meal_exists("delicious", dishes_ids, [400, 422])
+    meal = {
+        "name": "delicious",
+        "appetizer": dishes_ids[0],
+        "main": dishes_ids[1],
+        "dessert": dishes_ids[2]
+    }
+    response = connectionController.http_post("meals", meal)
+    assert_item_exists(response, [400, 422])
+
+
+#
+#     dishes = ["apple pie", "spaghetti", "orange"]
+#     dishes_ids = get_dishes_ids(dish_col, dishes)
+#     assert_meal_exists("delicious", dishes_ids, [400, 422])
 
 # # chat gpt stuff
 #
