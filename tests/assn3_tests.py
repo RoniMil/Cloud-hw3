@@ -25,7 +25,10 @@ def get_dishes_ids(col, dishes):
 # tests for dishes service
 
 def test1():
-    dishes = ["orange", "spaghetti", "apple pie"]
+    ##########################################################################
+    #dishes = ["orange", "spaghetti", "apple pie"]
+    dishes = ["blah", "spaghetti", "apple pie"]
+    ##########################################################################
     for dish in dishes:
         response = connectionController.http_post("dishes", {"name": dish})
         # asserts the dish is valid and can be added
