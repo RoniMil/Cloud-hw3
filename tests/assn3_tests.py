@@ -9,6 +9,19 @@ meal_col = {}
 
 # helper functions
 
+def get_dish_ID_by_name(col, dishName):
+    for dish_id, dish in col.items():
+        if dish.get("name") == dishName:
+            return dish_id
+    return 0
+
+def get_dishes_ids(col, dishes):
+    dishes_ids = []
+    for dish in dishes:
+        dishes_ids.append(get_dish_ID_by_name(col, dish))
+    return dishes_ids
+
+
 # def get_dish_by_id(dish_id):
 #     resource = f"dishes/{dish_id}"
 #     response = connectionController.http_get(resource)
@@ -32,32 +45,19 @@ meal_col = {}
 #     response = connectionController.http_get(resource)
 #     return response
 
-def get_dish_ID_by_name(col, dishName):
-    for dish_id, dish in col.items():
-        if dish.get("name") == dishName:
-            return dish_id
-    return 0
-
-def get_dishes_ids(col, dishes):
-    dishes_ids = []
-    for dish in dishes:
-        dishes_ids.append(get_dish_ID_by_name(col, dish))
-    return dishes_ids
-
-
 # tests for dishes service
 
 def test1():
     dishes = ["orange", "spaghetti", "apple pie"]
     for dish in dishes:
         response = connectionController.http_post("dishes", {"name": dish})
+        # asserts the dish is valid and can be added
         assert_valid_added_resource(response)
         dish_id = response.json()
         dish_json = connectionController.http_get(f"dishes/{dish_id}").json()
-        ##########################################################################
         curr_dishes = connectionController.http_get("dishes").json()
+        # asserts the given id of the dish we add is unique
         assert dish_id not in get_dishes_ids(dish_col, curr_dishes)
-        ##########################################################################
         dish_col[dish_id] = dish_json
 
 # !!! add assert correct form to post tests? !!!
@@ -65,23 +65,29 @@ def test1():
 def test2():
     dish_name = "orange"
     orange_id = get_dish_ID_by_name(dish_col, dish_name)
+    # asserts the id of orange is valid
     assert orange_id > 0
     response = connectionController.http_get(f"dishes/{orange_id}")
     response_json = response.json()
+    # asserts the sodium value of orange is in range
     assert (0.9 <= response_json["sodium"] <= 1.1)
+    # asserts the status code of the request is 200 - successful
     assert_status_code(response, status_code=200)
 
 def test3():
     response = connectionController.http_get("dishes")
     response_json = response.json()
-    assert (len(response_json) == 3)
+    assert len(response_json) == 3
     assert_status_code(response, status_code=200)
 
 
 
 def test4():
-    assert_non_existing_dish("blah", [404, 400, 422])
-
+    #########################################################################
+    response = connectionController.http_post("dishes", {"name": "blah"})
+    #########################################################################
+    assert_non_existing_dish(response, [404, 400, 422])
+    #assert_non_existing_dish("blah", [404, 400, 422])
 def test5():
     assert_dish_exists("orange", [400, 404, 422])
 
