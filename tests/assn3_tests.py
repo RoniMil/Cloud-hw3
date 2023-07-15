@@ -110,6 +110,7 @@ def test6():
     assert_valid_added_resource(response)
     meal_id = response.json()
     meal_json = connectionController.http_get(f"meals/{meal_id}").json()
+    print("meal_json is: ", meal_json)
     meal_col[response.json()] = meal_json
 
 def test7():
@@ -118,7 +119,7 @@ def test7():
     meals = response.json()
     assert len(meals) == 1
     meal = meals[0]
-    assert (400 <= meal["calories"] <= 500)
+    assert (400 <= meal.get("calories") <= 500)
 
     # for meal_id, meal_json in meals:
     #     print(meal_json.get("name"))
