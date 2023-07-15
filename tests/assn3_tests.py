@@ -54,6 +54,10 @@ def test1():
         assert_valid_added_resource(response)
         dish_id = response.json()
         dish_json = connectionController.http_get(f"dishes/{dish_id}").json()
+        ##########################################################################
+        curr_dishes = connectionController.http_get("dishes").json()
+        assert dish_id not in get_dishes_ids(dish_col, curr_dishes)
+        ##########################################################################
         dish_col[dish_id] = dish_json
 
 # !!! add assert correct form to post tests? !!!
