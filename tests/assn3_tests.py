@@ -114,13 +114,15 @@ def test6():
 
 def test7():
     response = connectionController.http_get("meals")
+    assert_status_code(response, status_code=200)
     meals = response.json()
     print("meals: ", meals)
     assert len(meals) == 1
     for meal in meals:
+        print ("meal:", meal)
         if meal.get("name") == "delicious":
             assert (400 <= meal["calories"] <= 500)
-    assert_status_code(response, status_code=200)
+
 
 def test8():
     dishes = ["apple pie", "spaghetti", "orange"]
