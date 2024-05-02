@@ -92,18 +92,23 @@ def test7():
     # asserts the returned code is 200
     assert_status_code(response, status_code=200)
     meals = response.json()
+    # asserts the length of meals collection is 1
     assert len(meals) == 1
+    for meal in meals.values():
+        if meal.get("name") == "delicious":
+            # asserts the meal calories value is in required range
+            assert (400 <= meal["cal"] <= 500)
 
-    for key in meals:
-        assert 400 <= meals[key]["cal"] <= 500
 
-
-def test_8():
-    global orange_dish_id, apple_pie_dish_id, spaghetti_dish_id
-    assert orange_dish_id is not None
-    assert apple_pie_dish_id is not None
-    assert spaghetti_dish_id is not None
-    meal = {"name": "delicious", "appetizer": orange_dish_id, "main": spaghetti_dish_id, "dessert": apple_pie_dish_id}
+def test8():
+    dishes = ["apple pie", "spaghetti", "orange"]
+    dishes_ids = get_dishes_ids(dish_col, dishes)
+    meal = {
+        "name": "delicious",
+        "appetizer": dishes_ids[0],
+        "main": dishes_ids[1],
+        "dessert": dishes_ids[2]
+    }
     response = connectionController.http_post("meals", meal)
-    assert_ret_value(response, returned_value=-2)
-    assert response.status_code == 400 or response.status_code == 422
+    # asserts the meal exists in collection meaning that posting returns -2 and that the status codes are 400 or 422
+    assert_item_exists(response, [400, 422])
