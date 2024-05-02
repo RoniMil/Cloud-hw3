@@ -11,5 +11,6 @@ Outputs:
 1. A log file containing the time the workflow starts executing, my name, status of image building operation (successful/not successful), status of container running (runnning/not running) and status of pytest tests (successfull if all passed and failed if at least one failed)
 2. Pytest tests results for each of the tests in assn3_tests.py
 3. File response.txt that contains nutritional information for the items from query made in Query job.
+4. The Docker image created in build job
 
-Also uploads artifacts after the workflow terminates
+Uploads outputs as artifacts after the workflow terminates
