@@ -104,6 +104,6 @@ def test_8():
     assert apple_pie_dish_id is not None
     assert spaghetti_dish_id is not None
     meal = {"name": "delicious", "appetizer": orange_dish_id, "main": spaghetti_dish_id, "dessert": apple_pie_dish_id}
-    response = ConnectionController.http_post("meals", meal)
-    Assertion.assert_ret_value(response, returned_value=-2)
+    response = connectionController.http_post("meals", meal)
+    assert_ret_value(response, returned_value=-2)
     assert response.status_code == 400 or response.status_code == 422
