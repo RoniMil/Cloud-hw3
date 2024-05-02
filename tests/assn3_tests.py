@@ -1,5 +1,3 @@
-import sys
-
 import connectionController
 from assertions import *
 

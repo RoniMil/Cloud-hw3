@@ -1,6 +1,8 @@
 import requests
 import json
 
+# GET and POST requests handling
+
 URL = "http://127.0.0.1:8000"
 
 def http_get(resource: str):

@@ -2,11 +2,10 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 import requests
 import json
+import os
 
 app = Flask(__name__)  # init Flask
 api = Api(app)  # create API
-
-# api key yy9bB6DaWfScfi2eDNI6PQ==w9MfBQ2l3ZfXQhgm
 
 # Class DishCollection provides CRUD ops on dishes.
 class DishCollection:
@@ -15,7 +14,7 @@ class DishCollection:
         self.dishes = {}  # The entire collection of dishes
 
     # adds new dish to the collection. The string given will be the dish's name. If successful returns the dish ID. Otherwise, returns 0
-    def addDish(self, dishName, cal, size, sodium, sugar):  # ???signature change???
+    def addDish(self, dishName, cal, size, sodium, sugar): 
         for dish in self.dishes.values():
             # checks if dish is already in collection
             if dish.get('name') == dishName:
@@ -54,6 +53,7 @@ class DishCollection:
         print("DishCollection: dish with name ", dishName, " not found")
         return 0
 
+    # returns a dish ID given its name
     def getDishIDByName(self, dishName):
         for id, dish in self.dishes.items():
             if dish['name'] == dishName:
@@ -215,7 +215,8 @@ class Dishes(Resource):
         if 'name' not in data:
             return -1, 422
         api_url = 'https://api.api-ninjas.com/v1/nutrition?query={}'.format(data['name'])
-        response = requests.get(api_url, headers={'X-Api-Key': 'yy9bB6DaWfScfi2eDNI6PQ==w9MfBQ2l3ZfXQhgm'})
+        api_key = os.getenv("API_NINJAS_KEY")
+        response = requests.get(api_url, headers={'X-Api-Key': api_key})
         status = response.status_code
         response_data = json.loads(response.text)
         # there was something wrong with the request to ninja api
@@ -239,8 +240,6 @@ class Dishes(Resource):
     # returns the JSON object listing all dishes in the collection
     def get(self):
         return colDishes.getAllDishes(), 200
-
-    # !!! delete /dishes? !!!
 
 
 # The Dishes class implements the REST operations for the /dishes/{ID} resource
